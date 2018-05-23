@@ -60,6 +60,11 @@ object util {
     spark
   }
 
+  // return spark context
+  def spark_context_cluster(ss: SparkSession): SparkContext = {
+    ss.sparkContext
+  }
+
   // load hive context
   def hive_context(ss: SparkSession): HiveContext ={
 

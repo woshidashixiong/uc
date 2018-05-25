@@ -27,8 +27,9 @@ object util {
   // load property config file
   def load_config(): Properties = {
     val pwd = new File(".").getCanonicalPath()
-    val path_file = "/src/main/scala/conf/rp.properties"
+    val path_file = "/src/main/resources/application.properties"
     val path = pwd + path_file
+    println(" path = " + path)
     val inputStream = new FileInputStream(path)
     val config = new Properties()
     config.load(inputStream)
@@ -36,17 +37,17 @@ object util {
   }
 
   // load config file
-  def get_config(variable : String): String = {
+  def get_config(variable: String): String = {
     load_config().getProperty(variable)
   }
 
   // load spark session
   def spark_session(): SparkSession = {
-    val config : Config = ConfigFactory.load()
+    val config: Config = ConfigFactory.load()
 
-    val spark = SparkSession
+    val spSession = SparkSession
       .builder()
-      .enableHiveSupport().master("local[*]")
+      .master("local[1]")
       .appName("hivemodes")
       .config("spark.defalut.parallelism", config.getString("partitions.num"))
       .config("spark.rdd.compress", "true")
@@ -57,7 +58,7 @@ object util {
       .config("hive.metastore.uris", config.getString("hive.url"))
       .enableHiveSupport()
       .getOrCreate()
-    spark
+    spSession
   }
 
   // return spark context
@@ -66,7 +67,7 @@ object util {
   }
 
   // load hive context
-  def hive_context(ss: SparkSession): HiveContext ={
+  def hive_context(ss: SparkSession): HiveContext = {
 
     val hiveContext = new HiveContext(ss.sparkContext)
     hiveContext

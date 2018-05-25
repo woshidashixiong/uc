@@ -11,6 +11,9 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.hive.HiveContext
 
 object util {
+
+  lazy val config: Config = ConfigFactory.load()
+
   // initial spark context
   def spark_context(): SparkContext = {
     Logger.getLogger("org").setLevel(Level.ERROR)
@@ -27,7 +30,7 @@ object util {
   // load property config file
   def load_config(): Properties = {
     val pwd = new File(".").getCanonicalPath()
-    val path_file = "/src/main/resources/application.properties"
+    val path_file = "/src/main/resources/application.conf"
     val path = pwd + path_file
     println(" path = " + path)
     val inputStream = new FileInputStream(path)
@@ -43,8 +46,6 @@ object util {
 
   // load spark session
   def spark_session(): SparkSession = {
-    val config: Config = ConfigFactory.load()
-
     val spSession = SparkSession
       .builder()
       .master("local[1]")

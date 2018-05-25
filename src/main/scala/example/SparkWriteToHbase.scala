@@ -1,4 +1,4 @@
-package exam
+package example
 
 import common.util
 import common.hbase_util

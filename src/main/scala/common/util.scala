@@ -46,7 +46,12 @@ object util {
 
   // load spark session
   def spark_session(): SparkSession = {
+
     val spSession = SparkSession
+
+    val config: Config = ConfigFactory.load()
+
+    val spark = SparkSession
       .builder()
       .master("local[1]")
       .appName("hivemodes")

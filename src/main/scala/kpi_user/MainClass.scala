@@ -1,5 +1,5 @@
 package kpi_user
 
-object mainClass {
+object MainClass {
     
 }

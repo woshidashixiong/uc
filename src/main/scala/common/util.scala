@@ -46,7 +46,7 @@ object util {
 
     val spark = SparkSession
       .builder()
-      .enableHiveSupport()
+      .enableHiveSupport().master("local[*]")
       .appName("hivemodes")
       .config("spark.defalut.parallelism", config.getString("partitions.num"))
       .config("spark.rdd.compress", "true")

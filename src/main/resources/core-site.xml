@@ -49,10 +49,10 @@
         <name>hadoop.tmp.dir</name>
         <value>/data/emr/hdfs/tmp</value>
     </property>
-    <property>
-        <name>io.compression.codecs</name>
-        <value>
-            org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec,org.apache.hadoop.io.compress.SnappyCodec
-        </value>
-    </property>
+    <!--<property>-->
+    <!--<name>io.compression.codecs</name>-->
+    <!--<value>-->
+    <!--org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec,org.apache.hadoop.io.compress.SnappyCodec-->
+    <!--</value>-->
+    <!--</property>-->
 </configuration>

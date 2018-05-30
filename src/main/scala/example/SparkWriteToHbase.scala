@@ -2,6 +2,7 @@ package example
 
 import common.util
 import common.hbase_util
+import enumeration.hbase_enum
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Put
 import org.apache.hadoop.hbase.util.Bytes

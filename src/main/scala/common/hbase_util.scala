@@ -9,6 +9,7 @@ import org.apache.hadoop.hbase.{HBaseConfiguration, HColumnDescriptor, HTableDes
   */
 object hbase_util extends Serializable {
 
+  final val column_key_separator:String = ":"
 
   /**
     * hbase conf

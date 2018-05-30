@@ -48,6 +48,12 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>core-site.xml</exclude>
+                    <exclude>hdfs-site.xml</exclude>
+                    <exclude>hbase-site.xml</exclude>
+                </excludes>
             </resource>
         </resources>
 

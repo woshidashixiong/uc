@@ -2,7 +2,7 @@ package com.bjtuling.utils
 
 import java.text.{ParseException, ParsePosition, SimpleDateFormat}
 import java.time.format.DateTimeFormatter
-import java.util.{Calendar, Date}
+import java.util.{Calendar, Date, TimeZone}
 
 import com.google.common.base.Strings
 import org.joda.time.format.DateTimeFormat
@@ -13,8 +13,11 @@ import org.joda.time.{LocalDate, Months}
   * Created by KG on 2017/4/8.
   */
 object date_util {
-  val dateFormat: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-  val dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  private val dateFormatter = new SimpleDateFormat("yyyy-MM-dd")
+  private val datetimeFormatter: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+  private val dateFormatterYYYYMMDD = new SimpleDateFormat("yyyyMMdd")
+  private val datetimeFormatterYYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss")
+  private val default_time_zone: TimeZone = TimeZone.getTimeZone("GMT+08:00")
 
   /**
     * 获取指定时间的昨天日期（格式：2016-10-13）
@@ -25,10 +28,10 @@ object date_util {
   def get_yesterday_by_job(start_dt: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormat.parse(start_dt))
+    cal.setTime(dateFormatter.parse(start_dt))
 
     cal.add(Calendar.DATE, -1)
-    val yesterday = dateFormat.format(cal.getTime())
+    val yesterday = dateFormatter.format(cal.getTime())
     yesterday
   }
 
@@ -41,10 +44,10 @@ object date_util {
   def get_last_month_by_job(start_dt: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormat.parse(start_dt))
+    cal.setTime(dateFormatter.parse(start_dt))
 
     cal.add(Calendar.MONTH, -1)
-    val yesterday = dateFormat.format(cal.getTime())
+    val yesterday = dateFormatter.format(cal.getTime())
     yesterday
   }
 
@@ -57,9 +60,9 @@ object date_util {
   def add_one_day(start_dt: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormat.parse(start_dt))
+    cal.setTime(dateFormatter.parse(start_dt))
     cal.add(Calendar.DATE, 1)
-    val one = dateFormat.format(cal.getTime())
+    val one = dateFormatter.format(cal.getTime())
     one
   }
 
@@ -72,9 +75,9 @@ object date_util {
   def add_one_month(start_dt: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormat.parse(start_dt))
+    cal.setTime(dateFormatter.parse(start_dt))
     cal.add(Calendar.MONTH, 1)
-    val one = dateFormat.format(cal.getTime())
+    val one = dateFormatter.format(cal.getTime())
     one
   }
 
@@ -87,9 +90,9 @@ object date_util {
     */
   def minus_days(dt: String, days: Int): String = {
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormat.parse(dt))
+    cal.setTime(dateFormatter.parse(dt))
     cal.add(Calendar.DATE, days)
-    val one = dateFormat.format(cal.getTime())
+    val one = dateFormatter.format(cal.getTime())
     one
   }
 
@@ -99,10 +102,20 @@ object date_util {
     * @return
     */
   def get_yesterday(): String = {
-    val cal: Calendar = Calendar.getInstance()
+    val cal: Calendar = Calendar.getInstance(default_time_zone)
     cal.add(Calendar.DATE, -1)
-    val yesterday = dateFormat.format(cal.getTime())
-    yesterday
+    dateFormatter.format(cal.getTime())
+  }
+
+  /**
+    * 获取当前系统时间的昨天日期（格式：2016-10-13）
+    *
+    * @return
+    */
+  def get_yesterday_yyyymmdd(): String = {
+    val cal: Calendar = Calendar.getInstance(default_time_zone)
+    cal.add(Calendar.DATE, -1)
+    dateFormatterYYYYMMDD.format(cal.getTime())
   }
 
   /**
@@ -113,22 +126,8 @@ object date_util {
     * @return
     */
   def get_interval_days(start_dt: String, end_dt: String): Long = {
-    val days = (dateFormat.parse(end_dt).getTime - dateFormat.parse(start_dt).getTime) / (1000 * 3600 * 24)
+    val days = (dateFormatter.parse(end_dt).getTime - dateFormatter.parse(start_dt).getTime) / (1000 * 3600 * 24)
     days
-  }
-
-  /**
-    * 获取开始日期和结束日期质之间的间隔月数
-    *
-    * @param start_dt
-    * @param end_dt
-    * @return
-    */
-  def get_interval_months(start_dt: String, end_dt: String): Int = {
-    val start_day = LocalDate.parse(start_dt, dateFormatter)
-    val end_day = LocalDate.parse(end_dt, dateFormatter)
-    val months = Months.monthsBetween(start_day, end_day).getMonths
-    months
   }
 
   /**
@@ -138,8 +137,7 @@ object date_util {
     */
   def get_current_systemtime(): String = {
     val now: Date = new Date()
-    val dateFormat: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    dateFormat.format(now)
+    datetimeFormatter.format(now)
   }
 
   /**
@@ -164,8 +162,17 @@ object date_util {
     */
   def get_current_date(): String = {
     val now: Date = new Date()
-    val dateFormat: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-    dateFormat.format(now)
+    dateFormatter.format(now)
+  }
+
+  /**
+    * 获取当前日期，格式为：yyyyMMdd
+    *
+    * @return
+    */
+  def get_current_date_yyyy_MM_dd(): String = {
+    val now: Calendar = Calendar.getInstance(default_time_zone)
+    dateFormatterYYYYMMDD.format(now.getTime)
   }
 
   /**

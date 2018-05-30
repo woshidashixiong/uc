@@ -48,9 +48,9 @@ object util {
   def spark_session(): SparkSession = {
     val spSession = SparkSession
       .builder()
-      .master("local[1]")
-      .appName("hivemodes")
-      .config("spark.defalut.parallelism", config.getString("partitions.num"))
+      //.master("local[1]")
+      //.appName("hivemodes")
+      //.config("spark.defalut.parallelism", config.getString("partitions.num"))
       .config("spark.rdd.compress", "true")
       .config("spark.locality.wait", "120")
       .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")

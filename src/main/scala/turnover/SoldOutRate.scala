@@ -1,0 +1,5 @@
+package turnover
+
+class SoldOutRate {
+
+}

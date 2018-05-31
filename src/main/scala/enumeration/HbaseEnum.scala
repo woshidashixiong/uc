@@ -63,6 +63,18 @@ object HbaseEnum {
     // columns
     val GoodsCode = Value("goods_code")
     val GoodsDayShelfAvgSaleNum = Value("goods_day_shelf_avg_sale_num")
+    
+    //user
+    val PeopleAvgGoodsNum = Value("people_avg_goods_num")
+    val PeopleAvgOrderNum = Value("people_avg_order_num")
+    
+    //operation
+    val GrossProfitRateNum = Value("gross_profit_rate")
+    val DiscountRateNum = Value("discount_rate")
+    val OperatingRateNum = Value("operating_rate")
+    val DamageProportionNum = Value("damage_proportion")
+    val LostProportionNum = Value("lost_proportion")
+
 
     private val map: mutable.HashMap[Value, Array[Byte]] = new mutable.HashMap[Value, Array[Byte]]
     ColumnAIUmichUmichProductLableEnum.values.foreach(col => {

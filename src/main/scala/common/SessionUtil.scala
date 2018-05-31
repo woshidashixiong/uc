@@ -48,7 +48,7 @@ object SessionUtil {
   def sparkSession(): SparkSession = {
     val spSession = SparkSession
       .builder()
-      //.master("local[1]")
+      .master("local[1]")
       //.appName("hivemodes")
       //.config("spark.defalut.parallelism", config.getString("partitions.num"))
       .config("spark.rdd.compress", "true")

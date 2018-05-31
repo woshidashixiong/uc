@@ -29,7 +29,7 @@ object HbaseUtil extends Serializable {
     createHbaseConfiguration(zookeeperHost, zookeeperPort)
   }
 
-  def create_hbase_connection(): Connection = {
+  def createHbaseConnection(): Connection = {
     val conf = createHbaseConfiguration();
     val conn = ConnectionFactory.createConnection(conf)
     conn

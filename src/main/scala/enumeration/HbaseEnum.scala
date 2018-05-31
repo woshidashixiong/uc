@@ -62,15 +62,26 @@ object HbaseEnum {
 
     // columns
     val GoodsCode = Value("goods_code")
+
+    // -- 单sku（最近一周）单点日均销量
     val GoodsDayShelfAvgSaleNum = Value("goods_day_shelf_avg_sale_num")
+
+    // -- 单SKU（最近一周）补货数量
+    val TotalReplenishmentNum = Value("total_replenishment_num")
+
+    // -- 单SKU最近三周补货数量
+    val AgvWeekRepNum = Value("avg_week_rep_num")
+
+    // -- 单SKU（最近一周）销售进度
+    val SalesProgress = Value("sales_progress")
 
     private val map: mutable.HashMap[Value, Array[Byte]] = new mutable.HashMap[Value, Array[Byte]]
     ColumnAIUmichUmichProductLableEnum.values.foreach(col => {
       map.+=(col -> Bytes.toBytes(col.toString))
     })
 
-    def getColumnsBytes(col_name: String): Option[Array[Byte]] = {
-      val col = values.find(_.toString == col_name)
+    def getColumnsBytes(colName: String): Option[Array[Byte]] = {
+      val col = values.find(_.toString == colName)
       col match {
         case Some(col) => map.get(col)
         case _ => None

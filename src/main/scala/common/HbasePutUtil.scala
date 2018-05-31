@@ -9,7 +9,7 @@ import org.apache.hadoop.hbase.util.{Bytes, MD5Hash}
   */
 object HbasePutUtil {
 
-  final val KeySeparator: String = ":"
+  final val KEY_SEPARATOR: String = ":"
 
   private def genRowKeyInternal(currenDate: String, id: String): Option[String] = {
     val currentDateTnal = currenDate.trim

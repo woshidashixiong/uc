@@ -31,8 +31,7 @@ object HbaseUtil extends Serializable {
 
   def createHbaseConnection(): Connection = {
     val conf = createHbaseConfiguration();
-    val conn = ConnectionFactory.createConnection(conf)
-    conn
+    ConnectionFactory.createConnection(conf)
   }
 
   //创建表,需要加锁，因为spark并行调用这个方法，会出现表已经存在异常,多个executor、就会多个jvm，所以这里还是有问题

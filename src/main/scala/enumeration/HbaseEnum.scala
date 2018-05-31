@@ -12,7 +12,7 @@ object HbaseEnum {
     */
   object NamespaceEnum extends Enumeration {
     type NamespaceEnum = Value
-    val AIUmich = Value("ai_umich")
+    val AI_UMICH = Value("ai_umich")
 
     private val map: mutable.HashMap[Value, Array[Byte]] = new mutable.HashMap[Value, Array[Byte]]
 
@@ -34,7 +34,7 @@ object HbaseEnum {
     */
   object TableAIUmichEnum extends Enumeration {
     type TableAIUmichEnum = Value
-    val UmichProductLabel = Value("umich_product_label")
+    val UMICH_PRODUCT_LABEL = Value("umich_product_label")
 
     private val map: mutable.HashMap[Value, Array[Byte]] = new mutable.HashMap[Value, Array[Byte]]
     TableAIUmichEnum.values.foreach(tab => {
@@ -56,41 +56,41 @@ object HbaseEnum {
   object ColumnAIUmichUmichProductLableEnum extends Enumeration {
     type column_ai_umich_umich_product_lable_enum = Value
     // column_family
-    val ColumnFamilyTurnover = Value("turnover")
-    val ColumnFamilyOperation = Value("operation")
-    val ColumnFamilyUser = Value("user")
+    val CF_TURNOVER = Value("turnover")
+    val CF_OPERATION = Value("operation")
+    val CF_USER = Value("user")
 
     /*
      * turnover
      */
-    val GoodsCode = Value("goods_code")
+    val GOODS_CODE = Value("goods_code")
 
     // -- 单sku（最近一周）单点日均销量
-    val GoodsDayShelfAvgSaleNum = Value("goods_day_shelf_avg_sale_num")
+    val GOODS_DAY_SHELF_AVG_SALE_NUM = Value("goods_day_shelf_avg_sale_num")
 
     // -- 单SKU（最近一周）补货数量
-    val TotalReplenishmentNum = Value("total_replenishment_num")
+    val TOTAL_REPLENISHMENT_NUM = Value("total_replenishment_num")
 
     // -- 单SKU最近三周补货数量
-    val AgvWeekRepNum = Value("avg_week_rep_num")
+    val AVG_WEEK_REP_NUM = Value("avg_week_rep_num")
 
     // -- 单SKU（最近一周）销售进度
-    val SalesProgress = Value("sales_progress")
+    val SALES_PROGRESS = Value("sales_progress")
 
     /*
      * user
      */
-    val PeopleAvgGoodsNum = Value("people_avg_goods_num")
-    val PeopleAvgOrderNum = Value("people_avg_order_num")
+    val PEOPLE_AVG_GOODS_NUM = Value("people_avg_goods_num")
+    val PEOPLE_AVG_ORDER_NUM = Value("people_avg_order_num")
 
     /*
      * operation
      */
-    val GrossProfitRateNum = Value("gross_profit_rate")
-    val DiscountRateNum = Value("discount_rate")
-    val OperatingRateNum = Value("operating_rate")
-    val DamageProportionNum = Value("damage_proportion")
-    val LostProportionNum = Value("lost_proportion")
+    val GROSS_PROFIT_RATE_NUM = Value("gross_profit_rate")
+    val DISCOUNT_RATE_NUM = Value("discount_rate")
+    val OPERATION_RATE_NUM = Value("operating_rate")
+    val DAMAGE_PROORTION_NUM = Value("damage_proportion")
+    val LOST_PROPORTION_NUM = Value("lost_proportion")
 
     private val map: mutable.HashMap[Value, Array[Byte]] = new mutable.HashMap[Value, Array[Byte]]
     ColumnAIUmichUmichProductLableEnum.values.foreach(col => {
@@ -107,7 +107,7 @@ object HbaseEnum {
   }
 
   def main(args: Array[String]): Unit = {
-    println(NamespaceEnum.getHbaseNamespaceBytes(NamespaceEnum.AIUmich.toString))
+    println(NamespaceEnum.getHbaseNamespaceBytes(NamespaceEnum.AI_UMICH.toString))
     println(NamespaceEnum.getHbaseNamespaceBytes("aaa"))
   }
 

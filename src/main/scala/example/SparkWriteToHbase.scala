@@ -25,7 +25,7 @@ object SparkWriteToHbase extends Serializable {
     println("-----------------------------------------------------------------------")
     baseStationDf.foreachPartition(partItr => {
       // connection
-      val conn = HbaseUtil.create_hbase_connection()
+      val conn = HbaseUtil.createHbaseConnection()
 
       // table
       val hbaseTableName = TableName.valueOf(tableName)

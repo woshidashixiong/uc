@@ -32,8 +32,10 @@ object DailyMeanSales extends Serializable {
       }
       dateInterval = args(0).trim
 
-      if (args.length >= 2) {
-        currentDate = args(1)
+      currentDate = if (args.length >= 2) {
+        args(1)
+      } else {
+        DateUtil.getYesterday()
       }
     } else {
       currentDate = DateUtil.getYesterday()
@@ -104,44 +106,43 @@ object DailyMeanSales extends Serializable {
 
     df.foreachPartition(partItr => {
       // connection
-      val conn = HbaseUtil.create_hbase_connection()
+      val conn = HbaseUtil.createHbaseConnection()
 
       // table
       import TableEnum._
       import DatabaseEnum._
-      val hbaseTableName = TableName.valueOf(AIUmich.toString + ":" + UmichProductLabel.toString)
-      val hbaseTable = conn.getBufferedMutator(hbaseTableName)
+      val tableName = TableName.valueOf(AI_UMICH.toString + HbasePutUtil.KEY_SEPARATOR + UMICH_PRODUCT_LABEL.toString)
+      val hbaseTable = conn.getBufferedMutator(tableName)
 
       // column-family : turnover
       import ColumnEnum._
-      val turnoverColFlyName = ColumnFamilyTurnover.toString
+      val turnoverColFlyName = CF_TURNOVER.toString
       val turnoverColFlyByte = getColumnsBytes(turnoverColFlyName).get
 
       // column : goods_code
-      val goodsCodeColName = GoodsCode.toString
-      val goodsCodeByte = getColumnsBytes(goodsCodeColName).get
+      val goodsCodeName = GOODS_CODE.toString
+      val goodsCodeByte = getColumnsBytes(goodsCodeName).get
 
       // column : goods_day_shelf_avg_sale_num
-      val avgSaleNumColName = GoodsDayShelfAvgSaleNum.toString
-      val avgSaleNumByte = getColumnsBytes(avgSaleNumColName).get
+      val avgSaleNumName = GOODS_DAY_SHELF_AVG_SALE_NUM.toString
+      val avgSaleNumByte = getColumnsBytes(avgSaleNumName).get
 
       // column
       partItr.foreach(r => {
         // key
-        val goodsNum = r.getAs[String](goodsCodeColName)
-        val rowKeyByte = Bytes.toBytes(keyPrefixBC.value + HbasePutUtil.KeySeparator + goodsNum)
+        val goodsCode = r.getAs[String](goodsCodeName)
+        val rowKeyByte = Bytes.toBytes(keyPrefixBC.value + HbasePutUtil.KEY_SEPARATOR + goodsCode)
 
         // columns
         val put = new Put(rowKeyByte)
-        put.addColumn(turnoverColFlyByte, goodsCodeByte, Bytes.toBytes(goodsNum))
-        put.addColumn(turnoverColFlyByte, avgSaleNumByte, Bytes.toBytes(r.getAs[Double](avgSaleNumColName)))
+        put.addColumn(turnoverColFlyByte, goodsCodeByte, Bytes.toBytes(goodsCode))
+        put.addColumn(turnoverColFlyByte, avgSaleNumByte, Bytes.toBytes(r.getAs[Double](avgSaleNumName)))
         hbaseTable.mutate(put)
       })
 
       hbaseTable.flush()
       hbaseTable.close()
     })
-    df.show()
 
     spSession.stop()
   }

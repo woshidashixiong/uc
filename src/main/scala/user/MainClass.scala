@@ -66,36 +66,36 @@ object MainClass {
     
         df.foreachPartition(partItr => {
             // connection
-            val conn = HbaseUtil.create_hbase_connection()
+            val conn = HbaseUtil.createHbaseConnection()
     
             // table
             import TableEnum._
             import DatabaseEnum._
-            val hbaseTableName = TableName.valueOf(AIUmich.toString + ":" + UmichProductLabel.toString)
+            val hbaseTableName = TableName.valueOf(AI_UMICH.toString + ":" + UMICH_PRODUCT_LABEL.toString)
             val hbaseTable = conn.getBufferedMutator(hbaseTableName)
     
             // column-family : user
             import ColumnEnum._
-            val UserColFlyName = ColumnFamilyUser.toString
+            val UserColFlyName = CF_USER.toString
             val turnoverColFlyByte = getColumnsBytes(UserColFlyName).get
     
             // column : goods_code
-            val goodsCodeColName = GoodsCode.toString
+            val goodsCodeColName = GOODS_CODE.toString
             val goodsCodeByte = getColumnsBytes(goodsCodeColName).get
     
             // column : people_avg_goods_num
-            val peopleAvgGoodsNum = PeopleAvgGoodsNum.toString
+            val peopleAvgGoodsNum = PEOPLE_AVG_GOODS_NUM.toString
             val peopleAvgGoodsNumByte = getColumnsBytes(peopleAvgGoodsNum).get
     
             //column  : people_avg_order_num
-            val peopleAvgOrderNum = PeopleAvgOrderNum.toString
+            val peopleAvgOrderNum = PEOPLE_AVG_ORDER_NUM.toString
             val peopleAvgOrderNumByte = getColumnsBytes(peopleAvgOrderNum).get
     
             // column
             partItr.foreach(r => {
                 // key
                 val goodsNum = r.getAs[String](goodsCodeColName)
-                val rowKeyByte = Bytes.toBytes(keyPrefixBC.value + HbasePutUtil.KeySeparator + goodsNum)
+                val rowKeyByte = Bytes.toBytes(keyPrefixBC.value + HbasePutUtil.KEY_SEPARATOR + goodsNum)
         
                 // columns
                 val put = new Put(rowKeyByte)

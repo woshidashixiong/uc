@@ -74,41 +74,41 @@ object MainClass {
     
     df.foreachPartition(partItr => {
       // connection
-      val conn = HbaseUtil.create_hbase_connection()
+      val conn = HbaseUtil.createHbaseConnection()
       
       // table
       import TableEnum._
       import DatabaseEnum._
-      val hbaseTableName = TableName.valueOf(AIUmich.toString + ":" + UmichProductLabel.toString)
+      val hbaseTableName = TableName.valueOf(AI_UMICH.toString + ":" + UMICH_PRODUCT_LABEL.toString)
       val hbaseTable = conn.getBufferedMutator(hbaseTableName)
       
       // column-family : user
       import ColumnEnum._
-      val OperationColFlyName = ColumnFamilyOperation.toString
+      val OperationColFlyName = CF_OPERATION.toString
       val turnoverColFlyByte = getColumnsBytes(OperationColFlyName).get
       
       // column : goods_code
-      val goodsCodeColName = GoodsCode.toString
+      val goodsCodeColName = GOODS_CODE.toString
       val goodsCodeByte = getColumnsBytes(goodsCodeColName).get
       //----------------------------------------------------------
       // column : gross_profit_rate
-      val grossProfitRateNum = GrossProfitRateNum.toString
+      val grossProfitRateNum = GROSS_PROFIT_RATE_NUM.toString
       val grossProfitRateNumByte = getColumnsBytes(grossProfitRateNum).get
       
       //column  : discount_rate
-      val discountRateNum = DiscountRateNum.toString
+      val discountRateNum = DISCOUNT_RATE_NUM.toString
       val discountRateNumByte = getColumnsBytes(discountRateNum).get
   
       // column : operating_rate
-      val operatingRateNum = OperatingRateNum.toString
+      val operatingRateNum = OPERATION_RATE_NUM.toString
       val operatingRateNumByte = getColumnsBytes(operatingRateNum).get
   
       //column  : damage_proportion
-      val damageProportionNum = DamageProportionNum.toString
+      val damageProportionNum = DAMAGE_PROORTION_NUM.toString
       val damageProportionNumByte = getColumnsBytes(damageProportionNum).get
   
       // column : lost_proportion
-      val lostProportionNumNum = LostProportionNum.toString
+      val lostProportionNumNum = LOST_PROPORTION_NUM.toString
       val lostProportionNumNumByte = getColumnsBytes(lostProportionNumNum).get
       
       

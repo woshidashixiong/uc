@@ -1,6 +1,6 @@
 package example
 
-import common.{hbase_util, util}
+import common.{HbaseUtil, SessionUtil}
 import org.apache.hadoop.classification.InterfaceAudience
 import org.apache.hadoop.hbase.client.Put
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -26,8 +26,8 @@ object SparkWriteToHbaseByJobConf extends Serializable {
   private final val tableColumnFamily = "info"
 
   def main(args: Array[String]): Unit = {
-    val spSession = util.spark_session()
-    val hbaseConf = hbase_util.create_hbase_configuration()
+    val spSession = SessionUtil.sparkSession()
+    val hbaseConf = HbaseUtil.createHbaseConfiguration()
 
     val jobConf = new JobConf(hbaseConf, this.getClass)
     jobConf.setOutputFormat(classOf[TableOutputFormat])

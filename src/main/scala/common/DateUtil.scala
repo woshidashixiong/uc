@@ -12,23 +12,23 @@ import org.joda.time.{LocalDate, Months}
   * 日期工具类
   * Created by KG on 2017/4/8.
   */
-object date_util {
+object DateUtil {
   private val dateFormatter = new SimpleDateFormat("yyyy-MM-dd")
   private val datetimeFormatter: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
   private val dateFormatterYYYYMMDD = new SimpleDateFormat("yyyyMMdd")
   private val datetimeFormatterYYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss")
-  private val default_time_zone: TimeZone = TimeZone.getTimeZone("GMT+08:00")
+  private val defaultTimeZone: TimeZone = TimeZone.getTimeZone("GMT+08:00")
 
   /**
     * 获取指定时间的昨天日期（格式：2016-10-13）
     *
-    * @param start_dt 指定时间
+    * @param startDate 指定时间
     * @return
     */
-  def get_yesterday_by_job(start_dt: String): String = {
+  def getYesterdayByJob(startDate: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormatter.parse(start_dt))
+    cal.setTime(dateFormatter.parse(startDate))
 
     cal.add(Calendar.DATE, -1)
     val yesterday = dateFormatter.format(cal.getTime())
@@ -38,13 +38,13 @@ object date_util {
   /**
     * 获取指定时间的上月日期（格式：2016-10-13）
     *
-    * @param start_dt 指定时间
+    * @param startDate 指定时间
     * @return
     */
-  def get_last_month_by_job(start_dt: String): String = {
+  def getLastMonthByJob(startDate: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormatter.parse(start_dt))
+    cal.setTime(dateFormatter.parse(startDate))
 
     cal.add(Calendar.MONTH, -1)
     val yesterday = dateFormatter.format(cal.getTime())
@@ -54,13 +54,13 @@ object date_util {
   /**
     * 增加一天
     *
-    * @param start_dt 指定时间
+    * @param startDate 指定时间
     * @return
     */
-  def add_one_day(start_dt: String): String = {
+  def addOneDay(startDate: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormatter.parse(start_dt))
+    cal.setTime(dateFormatter.parse(startDate))
     cal.add(Calendar.DATE, 1)
     val one = dateFormatter.format(cal.getTime())
     one
@@ -69,13 +69,13 @@ object date_util {
   /**
     * 增加一天
     *
-    * @param start_dt 指定时间
+    * @param startDate 指定时间
     * @return
     */
-  def add_one_month(start_dt: String): String = {
+  def addOneMonth(startDate: String): String = {
 
     val cal: Calendar = Calendar.getInstance()
-    cal.setTime(dateFormatter.parse(start_dt))
+    cal.setTime(dateFormatter.parse(startDate))
     cal.add(Calendar.MONTH, 1)
     val one = dateFormatter.format(cal.getTime())
     one
@@ -88,7 +88,7 @@ object date_util {
     * @param days 天数，可以为为负数
     * @return
     */
-  def minus_days(dt: String, days: Int): String = {
+  def minusDays(dt: String, days: Int): String = {
     val cal: Calendar = Calendar.getInstance()
     cal.setTime(dateFormatter.parse(dt))
     cal.add(Calendar.DATE, days)
@@ -101,8 +101,8 @@ object date_util {
     *
     * @return
     */
-  def get_yesterday(): String = {
-    val cal: Calendar = Calendar.getInstance(default_time_zone)
+  def getYesterday(): String = {
+    val cal: Calendar = Calendar.getInstance(defaultTimeZone)
     cal.add(Calendar.DATE, -1)
     dateFormatter.format(cal.getTime())
   }
@@ -112,8 +112,8 @@ object date_util {
     *
     * @return
     */
-  def get_yesterday_yyyymmdd(): String = {
-    val cal: Calendar = Calendar.getInstance(default_time_zone)
+  def getYesterdayYYYYMMDD(): String = {
+    val cal: Calendar = Calendar.getInstance(defaultTimeZone)
     cal.add(Calendar.DATE, -1)
     dateFormatterYYYYMMDD.format(cal.getTime())
   }
@@ -121,12 +121,12 @@ object date_util {
   /**
     * 获取开始日期和结束日期质之间的间隔天数
     *
-    * @param start_dt
-    * @param end_dt
+    * @param startDate
+    * @param endDate
     * @return
     */
-  def get_interval_days(start_dt: String, end_dt: String): Long = {
-    val days = (dateFormatter.parse(end_dt).getTime - dateFormatter.parse(start_dt).getTime) / (1000 * 3600 * 24)
+  def getIntervalDays(startDate: String, endDate: String): Long = {
+    val days = (dateFormatter.parse(endDate).getTime - dateFormatter.parse(startDate).getTime) / (1000 * 3600 * 24)
     days
   }
 
@@ -135,7 +135,7 @@ object date_util {
     *
     * @return
     */
-  def get_current_systemtime(): String = {
+  def getCurrentSystemTime(): String = {
     val now: Date = new Date()
     datetimeFormatter.format(now)
   }
@@ -143,12 +143,12 @@ object date_util {
   /**
     * 是否全量更新
     *
-    * @param start_date
-    * @param end_date
+    * @param startDate
+    * @param endDate
     * @return
     */
-  def is_full_update(start_date: String, end_date: String): Boolean = {
-    if (!Strings.isNullOrEmpty(start_date) && !Strings.isNullOrEmpty(end_date)) {
+  def isFullUpdate(startDate: String, endDate: String): Boolean = {
+    if (!Strings.isNullOrEmpty(startDate) && !Strings.isNullOrEmpty(endDate)) {
       false
     } else {
       true
@@ -160,7 +160,7 @@ object date_util {
     *
     * @return
     */
-  def get_current_date(): String = {
+  def getCurrentDate(): String = {
     val now: Date = new Date()
     dateFormatter.format(now)
   }
@@ -170,8 +170,8 @@ object date_util {
     *
     * @return
     */
-  def get_current_date_yyyy_MM_dd(): String = {
-    val now: Calendar = Calendar.getInstance(default_time_zone)
+  def getCurrentDateYYYYMMDD(): String = {
+    val now: Calendar = Calendar.getInstance(defaultTimeZone)
     dateFormatterYYYYMMDD.format(now.getTime)
   }
 
@@ -183,7 +183,7 @@ object date_util {
     * @tparam U
     * @return
     */
-  def time_cost[U](actionName: String)(action: => U): Unit = {
+  def timeCost[U](actionName: String)(action: => U): Unit = {
     val start = System.currentTimeMillis()
     val res = action
     val ss: Int = ((System.currentTimeMillis() - start) / 1000).toInt
@@ -193,7 +193,7 @@ object date_util {
     println(s"#### $actionName TimeCost: " + dd + "d " + (hh - dd * 24) + "h " + (MM - hh * 60) + "m " + (ss - MM * 60) + "s", "Total：" + (System.currentTimeMillis() - start) + "ms ")
   }
 
-  def parse_date(str: String, parsePatterns: String): Date = {
+  def parseDate(str: String, parsePatterns: String): Date = {
     if (str == null) return null
     try {
       val formatter: SimpleDateFormat = new SimpleDateFormat(parsePatterns);
@@ -207,7 +207,7 @@ object date_util {
     }
   }
 
-  def get_days_between(start: String, end: String): Seq[String] = {
+  def getDaysBetween(start: String, end: String): Seq[String] = {
     var seq = Seq[String]()
     val startDate: java.time.LocalDate = java.time.LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(start))
     val endDate: java.time.LocalDate = java.time.LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(end))

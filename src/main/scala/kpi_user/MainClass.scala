@@ -1,6 +1,6 @@
 package kpi_user
 
-import common.{hbase_util, util}
+import common.{HbaseUtil, SessionUtil}
 import kpi_revenue.MainClass.{tableColumnFamily, table_wast_and_lost_rate}
 import kpi_user.sql
 import org.apache.hadoop.hbase.TableName
@@ -13,14 +13,14 @@ object MainClass {
     private final val tableColumnFamily = "info"
     
     def get_user_avg_buy_num(): Unit ={
-        val spark_session = util.spark_session()
-        val hive_context = util.hive_context(spark_session)
+        val spark_session = SessionUtil.sparkSession()
+        val hive_context = SessionUtil.hiveContext(spark_session)
         val wast_rate_result = hive_context.sql(sql.user_avg_buy_num)
         wast_rate_result.show()
     
         wast_rate_result.foreachPartition(partItr => {
             // connection
-            val conn = hbase_util.create_hbase_connection()
+            val conn = HbaseUtil.create_hbase_connection()
         
             // table
             val hbaseTableName = TableName.valueOf(table_wast_and_lost_rate)
@@ -48,8 +48,8 @@ object MainClass {
     
     
     def get_user_avg_buy_time(): Unit ={
-        val spark_session = util.spark_session()
-        val hive_context = util.hive_context(spark_session)
+        val spark_session = SessionUtil.sparkSession()
+        val hive_context = SessionUtil.hiveContext(spark_session)
         val lost_rate_result = hive_context.sql(sql.user_avg_buy_time)
         lost_rate_result.show()
     }

@@ -1,7 +1,7 @@
 package example
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import common.{hbase_util, util}
+import common.{HbaseUtil, SessionUtil}
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Put
 import org.apache.hadoop.hbase.util.Bytes
@@ -12,7 +12,7 @@ object SparkWriteToHDFS extends Serializable {
   private final val localPath = s"file:///Users/lipeng/workspace_mryx/umich/src/main/scala/example/data/output/dim_base_station.json";
 
   def main(args: Array[String]): Unit = {
-    val spSession = util.spark_session()
+    val spSession = SessionUtil.sparkSession()
 
 
     val baseStationDf = spSession.sql(sql)

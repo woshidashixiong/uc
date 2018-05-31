@@ -1,6 +1,6 @@
 package kpi_revenue
 
-import common.{hbase_util, util}
+import common.{HbaseUtil, SessionUtil}
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Put
 import org.apache.hadoop.hbase.util.Bytes
@@ -15,14 +15,14 @@ object MainClass{
     
     
     def handle_wast_and_lost_rate(): Unit ={
-        val spark_session = util.spark_session()
-        val hive_context = util.hive_context(spark_session)
+        val spark_session = SessionUtil.sparkSession()
+        val hive_context = SessionUtil.hiveContext(spark_session)
         val wast_rate_result = hive_context.sql(sql.revenue_lost_and_wast_rate)
         wast_rate_result.show()
     
         wast_rate_result.foreachPartition(partItr => {
             // connection
-            val conn = hbase_util.create_hbase_connection()
+            val conn = HbaseUtil.create_hbase_connection()
     
             // table
             val hbaseTableName = TableName.valueOf(table_wast_and_lost_rate)
@@ -53,14 +53,14 @@ object MainClass{
     
     
     def handle_sku_price_and_discount_and_operate_rate(): Unit ={
-        val spark_session = util.spark_session()
-        val hive_context = util.hive_context(spark_session)
+        val spark_session = SessionUtil.sparkSession()
+        val hive_context = SessionUtil.hiveContext(spark_session)
         val results = hive_context.sql(sql.revenue_rate)
         results.show()
     
         results.foreachPartition(partItr => {
             // connection
-            val conn = hbase_util.create_hbase_connection()
+            val conn = HbaseUtil.create_hbase_connection()
         
             // table
             val hbaseTableName = TableName.valueOf(table_sku_price_and_discount_and_operate_rate)

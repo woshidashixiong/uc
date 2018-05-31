@@ -1,10 +1,10 @@
 package turnover
 
-import com.bjtuling.utils.date_util
-import common.{hbase_util, util}
-import enumeration.hbase_enum.{column_ai_umich_umich_product_lable_enum => column_enum}
-import enumeration.hbase_enum.{table_ai_umich_enum => table_enum}
-import enumeration.hbase_enum.{namespace_enum => database_enum}
+import com.bjtuling.utils.DateUtil
+import common.{HbasePutUtil, HbaseUtil, SessionUtil}
+import enumeration.HbaseEnum.{ColumnAIUmichUmichProductLableEnum => ColumnEnum}
+import enumeration.HbaseEnum.{TableAIUmichEnum => TableEnum}
+import enumeration.HbaseEnum.{NamespaceEnum => DatabaseEnum}
 import org.apache.commons.lang3.math.NumberUtils
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Put
@@ -23,21 +23,21 @@ object DailyMeanSales extends Serializable {
 
   private def init(args: Array[String]): Tuple3[String, String, String] = {
 
-    var date_interval = "7"
-    var current_date = ""
+    var dateInterval = "7"
+    var currentDate = ""
     if (null != args && !args.isEmpty) {
       if (NumberUtils.isDigits(args(0).trim)) {
         logger.error(" The interval of data is not a number !")
         System.exit(-1)
       }
-      date_interval = args(0).trim
+      dateInterval = args(0).trim
 
       if (args.length >= 2) {
-        current_date = args(1)
+        currentDate = args(1)
       }
     } else {
-      current_date = date_util.get_yesterday()
-      logger.warn(" The argument about data_interval and current_date are both null.")
+      currentDate = DateUtil.getYesterday()
+      logger.warn(" The argument about dateInterval and currentDate are both null.")
     }
 
     val sql =
@@ -64,7 +64,7 @@ object DailyMeanSales extends Serializable {
           |		      shop.city != '540200'
           |		      AND shop.dw_end_date = '2099-12-31')
           |		    AND sp.product_class_name != '虚拟商品'
-          |		  AND sp.ptdate BETWEEN date_sub('${current_date}', ${date_interval}) AND date_sub('${current_date}', 1)
+          |		  AND sp.ptdate BETWEEN date_sub('${currentDate}', ${dateInterval}) AND date_sub('${currentDate}', 1)
           |		GROUP BY
           |		sp.goods_code
           |	) AS T1
@@ -77,60 +77,59 @@ object DailyMeanSales extends Serializable {
           |		  JOIN bi_dw.dim_product_list AS p ON (p.goods_code = od.product_id AND p.product_class_name != '虚拟商品' AND p.dw_end_date = '2099-12-31')
           |		WHERE
           |		  od.order_status = 1
-          |		  AND od.ptdate BETWEEN date_sub('${current_date}', ${date_interval}) AND date_sub('${current_date}', 1)
+          |		  AND od.ptdate BETWEEN date_sub('${currentDate}', ${dateInterval}) AND date_sub('${currentDate}', 1)
           |		GROUP BY od.product_id
           |	)  AS T2
           |	ON (T1.sp_goods_code = T2.od_goods_code)""".stripMargin;
 
-    (sql, current_date, date_interval)
+    (sql, currentDate, dateInterval)
   }
 
   def main(args: Array[String]): Unit = {
 
-    val (sql, current_date, date_interval) = init(args)
+    val (sql, currentDate, dateInterval) = init(args)
+    logger.info(" currentDate = " + currentDate)
+    logger.info(" dateInterval = " + dateInterval)
 
-    logger.info(" current_date = " + current_date)
-    logger.info(" date_interval = " + date_interval)
 
-    println(" current_date = " + current_date)
-    println(" date_interval = " + date_interval)
-    println(" sql = " + sql)
-
-    val spSession = util.spark_session()
-    println("11111111")
+    val spSession = SessionUtil.sparkSession()
     val df = spSession.sql(sql)
-    val keyPrefix = current_date.replaceAll("-", "").reverse
-    println(" keyPrefix = " + keyPrefix)
+    val keyPrefix = currentDate.replaceAll("-", "").reverse
     val keyPrefixBC = spSession.sparkContext.broadcast(keyPrefix)
+    // TODO would be deleted
+    println(" currentDate = " + currentDate)
+    println(" dateInterval = " + dateInterval)
+    println(" sql = " + sql)
+    println(" keyPrefix = " + keyPrefix)
 
     df.foreachPartition(partItr => {
       // connection
-      val conn = hbase_util.create_hbase_connection()
+      val conn = HbaseUtil.create_hbase_connection()
 
       // table
-      import table_enum._
-      import database_enum._
-      val hbaseTableName = TableName.valueOf(ai_umich.toString + ":" + umich_product_label.toString)
+      import TableEnum._
+      import DatabaseEnum._
+      val hbaseTableName = TableName.valueOf(AIUmich.toString + ":" + UmichProductLabel.toString)
       val hbaseTable = conn.getBufferedMutator(hbaseTableName)
 
       // column-family : turnover
-      import column_enum._
-      val turnoverColFlyName = column_family_turnover.toString
-      val turnoverColFlyByte = get_columns_bytes(turnoverColFlyName).get
+      import ColumnEnum._
+      val turnoverColFlyName = ColumnFamilyTurnover.toString
+      val turnoverColFlyByte = getColumnsBytes(turnoverColFlyName).get
 
       // column : goods_code
-      val goodsCodeColName = goods_code.toString
-      val goodsCodeByte = get_columns_bytes(goodsCodeColName).get
+      val goodsCodeColName = GoodsCode.toString
+      val goodsCodeByte = getColumnsBytes(goodsCodeColName).get
 
       // column : goods_day_shelf_avg_sale_num
-      val avgSaleNumColName = goods_day_shelf_avg_sale_num.toString
-      val avgSaleNumByte = get_columns_bytes(avgSaleNumColName).get
+      val avgSaleNumColName = GoodsDayShelfAvgSaleNum.toString
+      val avgSaleNumByte = getColumnsBytes(avgSaleNumColName).get
 
       // column
       partItr.foreach(r => {
         // key
         val goodsNum = r.getAs[String](goodsCodeColName)
-        val rowKeyByte = Bytes.toBytes(keyPrefixBC.value + hbase_util.column_key_separator + goodsNum)
+        val rowKeyByte = Bytes.toBytes(keyPrefixBC.value + HbasePutUtil.KeySeparator + goodsNum)
 
         // columns
         val put = new Put(rowKeyByte)

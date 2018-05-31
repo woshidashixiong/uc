@@ -1,6 +1,6 @@
 package example
 
-import common.util
+import common.SessionUtil
 
 object SparkWriteToCSV extends Serializable {
 
@@ -11,7 +11,7 @@ object SparkWriteToCSV extends Serializable {
   private final val tableColumnFamily = "info"
 
   def main(args: Array[String]): Unit = {
-    val spSession = util.spark_session()
+    val spSession = SessionUtil.sparkSession()
 
     val baseStationDf = spSession.sql(sql)
     baseStationDf.show()

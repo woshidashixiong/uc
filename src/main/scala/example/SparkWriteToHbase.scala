@@ -1,8 +1,8 @@
 package example
 
-import common.util
-import common.hbase_util
-import enumeration.hbase_enum
+import common.SessionUtil
+import common.HbaseUtil
+import enumeration.HbaseEnum
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Put
 import org.apache.hadoop.hbase.util.Bytes
@@ -16,7 +16,7 @@ object SparkWriteToHbase extends Serializable {
   private final val tableColumnFamily = "info"
 
   def main(args: Array[String]): Unit = {
-    val spSession = util.spark_session()
+    val spSession = SessionUtil.sparkSession()
 
 
     val baseStationDf = spSession.sql(sql)
@@ -25,7 +25,7 @@ object SparkWriteToHbase extends Serializable {
     println("-----------------------------------------------------------------------")
     baseStationDf.foreachPartition(partItr => {
       // connection
-      val conn = hbase_util.create_hbase_connection()
+      val conn = HbaseUtil.create_hbase_connection()
 
       // table
       val hbaseTableName = TableName.valueOf(tableName)

@@ -1,6 +1,6 @@
 package example
 
-import common.util
+import common.SessionUtil
 import org.apache.spark.sql.SaveMode
 
 object SparkWriteToHive extends Serializable {
@@ -10,7 +10,7 @@ object SparkWriteToHive extends Serializable {
   def main(args: Array[String]): Unit = {
 
 
-    val spSession = util.spark_session()
+    val spSession = SessionUtil.sparkSession()
 
     import spSession.implicits._
     import spSession.sql

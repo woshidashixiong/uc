@@ -1,6 +1,6 @@
 package example
 
-import common.{hbase_util, util}
+import common.{HbaseUtil, SessionUtil}
 import example.SparkWriteToCSV.localPath
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Put
@@ -15,7 +15,7 @@ object SparkWriteToParquet extends Serializable {
   private final val tableColumnFamily = "info"
 
   def main(args: Array[String]): Unit = {
-    val spSession = util.spark_session()
+    val spSession = SessionUtil.sparkSession()
 
 
     val baseStationDf = spSession.sql(sql)

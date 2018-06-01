@@ -19,7 +19,7 @@ object sql {
           |WHERE
           |	od.order_status = 1
           |	AND od.product_id != 'blg-mryx-repay'  -- 去除补款数据
-          |	AND od.ptdate BETWEEN date_sub(%s, %s) AND date_sub(%s, 1)  -- ### 可选定时间范围 ###
+          |	AND od.ptdate BETWEEN date_sub('%s', %s) AND date_sub('%s', 1)  -- ### 可选定时间范围 ###
           |GROUP BY
           |	od.product_id
         """.stripMargin
@@ -50,7 +50,7 @@ object sql {
           |		FROM
           |			bi_dw.fact_product_inv AS i
           |		WHERE
-          |			i.ptdate = date_sub(%s, %s)   -- ### 设定起始时间 ###
+          |			i.ptdate = date_sub('%s', %s)   -- ### 设定起始时间 ###
           |		GROUP BY
           |			i.product_code
           |		) AS T1 ON (p.goods_code = T1.i_goods_code)
@@ -63,7 +63,7 @@ object sql {
           |			bi_dw.fact_erp_replenishment_data AS r
           |		WHERE
           |		    r.status = 1
-          |			AND to_date(r.receive_time) BETWEEN date_sub(%s, %s) AND date_sub(%s, 1)  -- ### 设定时间范围 ###
+          |			AND to_date(r.receive_time) BETWEEN date_sub('%s', %s) AND date_sub('%s', 1)  -- ### 设定时间范围 ###
           |		GROUP BY
           |			r.goods_code
           |		) AS T2 ON (p.goods_code = T2.r_goods_code)
@@ -81,7 +81,7 @@ object sql {
           |	FROM
           |	    bi_dw.fact_inventory_check_detail_old AS cd
           |	WHERE
-          |		cd.ptdate BETWEEN date_sub(%s, %s) AND date_sub(%s, 1)  -- ### 设定时间范围 ###
+          |		cd.ptdate BETWEEN date_sub('%s', %s) AND date_sub('%s', 1)  -- ### 设定时间范围 ###
           |	GROUP BY
           |		cd.goods_no
           |	) AS A2 ON (A1.p_goods_code = A2.cd_goods_code)

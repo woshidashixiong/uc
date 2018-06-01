@@ -14,7 +14,7 @@ object sql {
           |WHERE
           |	od.order_status = 1
           |	AND od.product_id != 'blg-mryx-repay'  -- 去除补款数据
-          |	AND od.ptdate BETWEEN date_sub(%s, %s) AND date_sub(%s, 1)  -- ### 设定时间范围 ###
+          |	AND od.ptdate BETWEEN date_sub('%s', %s) AND date_sub('%s', 1)  -- ### 设定时间范围 ###
           |GROUP BY
           |	od.product_id
         """.stripMargin

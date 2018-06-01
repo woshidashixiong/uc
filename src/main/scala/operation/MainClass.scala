@@ -84,7 +84,7 @@ object MainClass {
       // column-family : user
       import ColumnEnum._
       val OperationColFlyName = CF_OPERATION.toString
-      val turnoverColFlyByte = getColumnsBytes(OperationColFlyName).get
+      val operationColFlyByte = getColumnsBytes(OperationColFlyName).get
 
       // column : goods_code
       val goodsCodeColName = GOODS_CODE.toString
@@ -119,12 +119,12 @@ object MainClass {
 
         // columns
         val put = new Put(rowKeyByte)
-        put.addColumn(turnoverColFlyByte, goodsCodeByte, Bytes.toBytes(goodsNum))
-        put.addColumn(turnoverColFlyByte, grossProfitRateNumByte, Bytes.toBytes(r.getAs[Double](grossProfitRateNum)))
-        put.addColumn(turnoverColFlyByte, discountRateNumByte, Bytes.toBytes(r.getAs[Double](discountRateNum)))
-        put.addColumn(turnoverColFlyByte, operatingRateNumByte, Bytes.toBytes(r.getAs[Double](operatingRateNum)))
-        put.addColumn(turnoverColFlyByte, damageProportionNumByte, Bytes.toBytes(r.getAs[Double](damageProportionNum)))
-        put.addColumn(turnoverColFlyByte, lostProportionNumNumByte, Bytes.toBytes(r.getAs[Double](lostProportionNumNum)))
+        put.addColumn(operationColFlyByte, goodsCodeByte, Bytes.toBytes(goodsNum))
+        put.addColumn(operationColFlyByte, grossProfitRateNumByte, Bytes.toBytes(r.getAs[Double](grossProfitRateNum)))
+        put.addColumn(operationColFlyByte, discountRateNumByte, Bytes.toBytes(r.getAs[Double](discountRateNum)))
+        put.addColumn(operationColFlyByte, operatingRateNumByte, Bytes.toBytes(r.getAs[Double](operatingRateNum)))
+        put.addColumn(operationColFlyByte, damageProportionNumByte, Bytes.toBytes(r.getAs[Double](damageProportionNum)))
+        put.addColumn(operationColFlyByte, lostProportionNumNumByte, Bytes.toBytes(r.getAs[Double](lostProportionNumNum)))
         hbaseTable.mutate(put)
       })
 

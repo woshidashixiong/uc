@@ -77,7 +77,7 @@ object MainClass {
             // column-family : user
             import ColumnEnum._
             val UserColFlyName = CF_USER.toString
-            val turnoverColFlyByte = getColumnsBytes(UserColFlyName).get
+            val userColFlyByte = getColumnsBytes(UserColFlyName).get
     
             // column : goods_code
             val goodsCodeColName = GOODS_CODE.toString
@@ -99,9 +99,9 @@ object MainClass {
         
                 // columns
                 val put = new Put(rowKeyByte)
-                put.addColumn(turnoverColFlyByte, goodsCodeByte, Bytes.toBytes(goodsNum))
-                put.addColumn(turnoverColFlyByte, peopleAvgOrderNumByte, Bytes.toBytes(r.getAs[Double](peopleAvgGoodsNum)))
-                put.addColumn(turnoverColFlyByte, peopleAvgOrderNumByte, Bytes.toBytes(r.getAs[Double](peopleAvgOrderNum)))
+                put.addColumn(userColFlyByte, goodsCodeByte, Bytes.toBytes(goodsNum))
+                put.addColumn(userColFlyByte, peopleAvgGoodsNumByte, Bytes.toBytes(r.getAs[Double](peopleAvgGoodsNum)))
+                put.addColumn(userColFlyByte, peopleAvgOrderNumByte, Bytes.toBytes(r.getAs[Double](peopleAvgOrderNum)))
                 hbaseTable.mutate(put)
             })
     
